@@ -3,7 +3,7 @@ use Mojo::Base 'Mojolicious::Plugin';
 
 use Mojo::UserAgent::Transactor;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 has app         => sub { die 'not registered!' };
 has transactor  => sub { Mojo::UserAgent::Transactor->new };
@@ -22,8 +22,8 @@ sub _subdispatch {
 
     # build transaction
     my $tx = $post_data ?
-        $self->transactor->form($url, $post_data)
-        : $self->transactor->tx($method, $url);
+        $self->transactor->tx($method => $url => form => $post_data)
+        : $self->transactor->tx($method => $url);
 
     # dispatch
     $self->app->handler($tx);
